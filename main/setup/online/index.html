@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Symbolic Logic Evaluator</title>
+<link rel="icon" 
+      type="image/ico" 
+      href="sle.ico">
+<style type="text/css">
+body {
+	font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	background: #42413C;
+	margin: 0;
+	padding: 0;
+	color: #000;
+}
+
+/* ~~ Element/tag selectors ~~ */
+ul, ol, dl { /* Due to variations between browsers, it's best practices to zero padding and margin on lists. For consistency, you can either specify the amounts you want here, or on the list items (LI, DT, DD) they contain. Remember that what you do here will cascade to the .nav list unless you write a more specific selector. */
+	padding: 0;
+	margin: 0;
+}
+h1, h2, h3, h4, h5, h6, p {
+	margin-top: 0;	 /* removing the top margin gets around an issue where margins can escape from their containing div. The remaining bottom margin will hold it away from any elements that follow. */
+	padding-right: 15px;
+	padding-left: 15px; /* adding the padding to the sides of the elements within the divs, instead of the divs themselves, gets rid of any box model math. A nested div with side padding can also be used as an alternate method. */
+}
+a img { /* this selector removes the default blue border displayed in some browsers around an image when it is surrounded by a link */
+	border: none;
+}
+/* ~~ Styling for your site's links must remain in this order - including the group of selectors that create the hover effect. ~~ */
+a:link {
+	color: #B2DFEE;
+	text-decoration: underline; /* unless you style your links to look extremely unique, it's best to provide underlines for quick visual identification */
+}
+a:visited {
+	color: #B2DFEE;
+	text-decoration: underline;
+}
+a:hover, a:active, a:focus { /* this group of selectors will give a keyboard navigator the same hover experience as the person using a mouse. */
+	text-decoration: none;
+	color: #000000;
+}
+
+/* ~~ this fixed width container surrounds the other divs ~~ */
+.container {
+	width: 960px;
+	background: #42647F;
+	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout */
+}
+
+/* ~~ the header is not given a width. It will extend the full width of your layout. It contains an image placeholder that should be replaced with your own linked logo ~~ */
+.header {
+	background: #B2DFEE;
+}
+
+/* ~~ This is the layout information. ~~ 
+
+1) Padding is only placed on the top and/or bottom of the div. The elements within this div have padding on their sides. This saves you from any "box model math". Keep in mind, if you add any side padding or border to the div itself, it will be added to the width you define to create the *total* width. You may also choose to remove the padding on the element in the div and place a second div within it with no width and the padding necessary for your design.
+
+*/
+
+.content {
+	padding: 0px 0;
+	color: #FFF;
+}
+
+/* ~~ The footer ~~ */
+.footer {
+	padding: 3px 0;
+	background: #B2DFEE;
+}
+
+/* ~~ miscellaneous float/clear classes ~~ */
+.fltrt {  /* this class can be used to float an element right in your page. The floated element must precede the element it should be next to on the page. */
+	float: right;
+	margin-left: 8px;
+}
+.fltlft { /* this class can be used to float an element left in your page. The floated element must precede the element it should be next to on the page. */
+	float: left;
+	margin-right: 8px;
+}
+.clearfloat { /* this class can be placed on a <br /> or empty div as the final element following the last floated div (within the #container) if the #footer is removed or taken out of the #container */
+	clear:both;
+	height:0;
+	font-size: 1px;
+	line-height: 0px;
+}
+.container .footer p a {
+	color: #000000;
+}
+-->
+</style>
+
+<script src="web_library.js"></script>
+<script>
+function update_result(form) {
+	
+	var raw_premises = form.premises_box.value
+	var raw_conclusion = form.conclusion_box.value
+	var result = get_result_text(raw_premises, raw_conclusion)
+	form.result_box.value = result[0]
+	form.info_box.value = result[1]
+}
+</script></head>
+
+<body>
+<div class="container">
+  <div class="header"><!-- end .header -->
+    <a id="top"></a><h1>Symbolic Logic Evaluator</h1>
+    <p>&nbsp;</p>
+  </div>
+  <div class="content">
+    <h2>Instantly know the validity of your  symbolic logic argument</h2>
+    <p>It's really simple. Just type in your premises  and conclusion, and watch the result update.<br />
+    Currently only sentential logic is supported.</p>
+    <p>{ <a href="#guide">Guide</a> }<br />
+    { <a href="#faq">FAQ</a> }</p>
+<div align="center">
+  <table width="300" border="0" cellpadding="3">
+    <tr><form name="sle">
+      <td>
+      <p align="left"><label for="premises_box"><strong>Premises</strong></label>
+        (one per line)<br />
+        <textarea id="premises_box" rows="8" cols="37" value="" autofocus="autofocus" onKeyUp="update_result(this.form)" style="font-size:18px; resize:none" wrap="off"></textarea></p>
+        
+        <p align="left"><label for="conclusion_box"><strong>Conclusion</strong></label><br />
+          <input type="text" id="conclusion_box" size="28" value="" onKeyUp="update_result(this.form)" style="font-size:16px"/></td>
+          
+      <td>
+      <p align="left">
+      <label for="result_box">
+        <strong>Result</strong>
+        </label><br />
+          <input type="text" id="result_box" rows="1" size="4" value="None" readonly="readonly" style="font-size:33px"></textarea>
+          </p>
+          
+          <p align="left"><label for="info_box">
+        <strong>Info</strong>
+        </label><br />
+          <textarea id="info_box" rows="8" cols="28" value=""readonly="readonly" style="font-size:18px; resize:none">no argument</textarea>
+          
+          </td>
+      </form></tr>
+  </table></p>
+</div>
+<h2><a id="guide"></a>Guide</h2>
+<p>Here's what you type for each logical expression. (The ones with commas mean you have multiple options.)</p>
+<p>
+<div align="center">
+  <table width="350" border="0" cellpadding="1">
+    <tr>
+      <td><div align="left"><strong>Expression</strong></div></td>
+      <td><div align="left"><strong>What to type</strong></div></td>
+      <td><div align="left"><strong>Example</strong></div></td>
+      </tr>
+    <tr>
+      <td><div align="left">propositions</div></td>
+      <td><div align="left">Uppercase P–Z</div></td>
+      <td><div align="left">P</div></td>
+      </tr>
+    <tr>
+      <td><div align="left">parentheses</div></td>
+      <td><div align="left">( )</div></td>
+      <td><div align="left">(Q)</div></td>
+      </tr>
+    <tr>
+      <td><div align="left">and</div></td>
+      <td><div align="left">&amp;, ^, +</div></td>
+      <td><div align="left">P & Q</div></td>
+      </tr>
+    <tr>
+      <td><div align="left">or</div></td>
+      <td><div align="left">v, /</div></td>
+      <td><div align="left">Q v R</div></td>
+      </tr>
+    <tr>
+      <td><div align="left">not</div></td>
+      <td><div align="left">~, -, !</div></td>
+      <td><div align="left">~S</div></td>
+      </tr>
+    <tr>
+      <td><div align="left">if</div></td>
+      <td><div align="left">&gt;</div></td>
+      <td><div align="left">P > Q</div></td>
+      </tr>
+    <tr>
+      <td><div align="left">iff</div></td>
+      <td><div align="left">=</div></td>
+      <td><div align="left">R = S</div></td>
+      </tr>
+  </table>
+</div>
+    <p>&nbsp;</p>
+    <p>Here's the explanation of the results.</p>
+<p></p>
+    <div align="center">
+      <table width="805" border="0" cellpadding="3">
+        <tr>
+          <td width="65"><strong>Result</strong></td>
+          <td width="236"><strong>Meaning</strong></td>
+          <td width="478"><strong>Possible info</strong></td>
+        </tr>
+        <tr>
+          <td><strong>None</strong><br />
+          &nbsp;</td>
+          <td>Nothing to evaluate<br />
+          &nbsp;</td>
+          <td>no argument<br />
+            no conclusion</td>
+        </tr>
+        <tr>
+          <td><strong>Error</strong><br />
+            &nbsp;<br />
+          &nbsp;</td>
+          <td>Problem with the input<br />
+            &nbsp;<br />
+          &nbsp;</td>
+          <td>invalid character<br />
+            improper brackets<br />
+            faulty syntax</td>
+        </tr>
+        <tr>
+          <td><strong>Valid</strong><br />
+          &nbsp;<br />
+          &nbsp;</td>
+          <td>If the premises are true,<br />
+          the conclusion must be true<br />
+          &nbsp;</td>
+          <td>circular (the conclusion is contained in the premises)<br />
+            self-contradictory premises (the premises are never  true)<br />
+            tautology (the conclusion is always  true)</td>
+        </tr>
+        <tr>
+          <td><strong>Invalid</strong><br />
+          &nbsp;<br />
+          &nbsp;</td>
+          <td>The premises can be true<br />
+            and yet the conclusion false<br />
+            &nbsp;</td>
+          <td>contradiction (the conclusion is never  true)<br />
+            counterexample (an arrangement of   truth values<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;proving that the argument is invalid)</td>
+        </tr>
+      </table>
+    </div>
+    <p><br />
+  </p>
+<p>{ <a href="#top">top</a> }</p>
+    <p>&nbsp;</p>
+    <h2><a id="faq"></a>FAQ</h2>
+    <p><strong>What <em>is</em> modern symbolic logic, anyway?</strong></p>
+    <p>If you have to ask, you probably don't need this tool! :)<br />
+    Modern symbolic logic is an artificial language designed to express the structure of a logical argument unambiguously.
+    For example, all arguments of the form &quot;P; if P, then Q; therefore, Q&quot;, no matter  what propositions are substituted for &quot;P&quot; and &quot;Q&quot;, are rendered the same in MSL.</p>
+    <p><strong>Why did you make this?</strong></p>
+    <p>Nominally: to help students just beginning to learn MSL analyze arguments more easily.<br />
+      Secretly:  I knew that MSL can be  computed easily,  so I thought for sure there would be an evaluator online.<br />
+      I couldn't find one, so I made one.</p>
+    <p><strong>How did you make this?</strong></p>
+    <p>      I wrote the original  in Python. But the size  needed to distribute it to users who don't already have Python was just not worth the scope of the program, so I rewrote it in Javascript and voilà. However,
+      the Python version is available  as an offline version; the  PC version can be downloaded <a href="sle.zip">here</a>.</p>
+    <p><strong>What do you know about logic? about programming?</strong></p>
+    <p>Not much about either. In both cases all I know comes from  a single introductory course at the U of Toronto.</p>
+    <p><strong>I got an answer that doesn't seem right. Shouldn't ____ evaluate to ____ ?</strong></p>
+    <p>First, check your brackets. For example,  with the premises &quot;<strong>P v Q</strong>&quot; and &quot;<strong>Q v R</strong>&quot;, the conclusion &quot;<strong>~P &amp; ~Q &gt; R</strong>&quot; is invalid because the computer reads the conditional  before the conjunction. But    &quot;<strong>(~P &amp; ~Q) &gt; R</strong>&quot;  is valid.<br />
+    Second, make sure you understand what is going on at the logical level.<br />
+    If brackets don't fix the problem or you think the logic is wrong, <a href="mailto:luke@unfamiliarplace.com">email</a> me your argument and your explanation. </p>
+<p><strong>Will you ever support predicate logic?</strong></p>
+    <p>Monadic predicate logic can indeed be computed. I am considering it for a future update.<br />
+    </p>
+    <p>{ <a href="#top">top</a> }</p>
+    <p>&nbsp;</p>
+<!-- end .content --></div>
+  <div class="footer">
+    <p>© 2013 Luke Sawczak {<a href="http://www.unfamiliarplace.com/">site</a>}   ///// 17/02/2013  { <a href="changelog.txt">changes</a> } ///// feedback, suggestions, &amp; bugs {<a href="mailto:luke@unfamiliarplace.com">email</a>}</p>
+    <!-- end .footer --></div>
+  <!-- end .container --></div>
+</body>
+</html>

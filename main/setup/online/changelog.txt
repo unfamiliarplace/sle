@@ -1,0 +1,4 @@
+# SLE changelog
+# Last updated 17/02/2013
+
+v 1.00 : Initial release
